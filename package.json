@@ -1,0 +1,27 @@
+{ "author": "Paul Serby <paul@serby.net>"
+, "name": "cf-list-aggregator"
+, "description": "Compiles lists of content base on defined filtering and ordering"
+, "version": "0.0.1"
+, "tags": []
+, "repository":
+  { "type": "git"
+  , "url": "git@github.com:serby/cf-list-aggregator"
+  }
+, "publishConfig": {
+    "registry":"http://npm.clockte.ch"
+  }
+, "main": ""
+, "scripts":
+  { "test": "make test"
+  }
+, "engines":
+  { "node": ">=0.8"
+  }
+, "dependencies":
+  {
+  }
+, "devDependencies":
+  { "mocha": "*"
+  , "should": "*"
+  }
+}
