@@ -1,6 +1,6 @@
 # cf-list-aggregator
 
-Compiles lists of content base on defined filtering and ordering
+Compiles lists of content base on defined filtering and ordering.
 
 ## Installation
 
