@@ -1,4 +1,4 @@
-var minimize = require('../../../lib/list-aggregator/minimize')
+var minimize = require('../../lib/minimize')
   , _ = require('lodash')
   , eql = require('../../../lib/sequential-object-eql')
   , articleFixtures = require('../../article/fixtures')

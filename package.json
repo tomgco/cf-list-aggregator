@@ -16,14 +16,24 @@
     "test": "make test"
   },
   "engines": {
-    "node": ">=0.8"
+    "node": ">=0.10"
   },
   "dependencies": {
-    "lodash": "*",
-    "async": "~0.2.9"
+    "lodash": "~2.2.1",
+    "async": "~0.2.9",
+    "cf-visibility-check": "0.0.1",
+    "cf-sectionizer": "0.0.2"
   },
   "devDependencies": {
     "mocha": "*",
-    "should": "*"
+    "should": "*",
+    "fleet-street": "git+ssh://git@github.com:clocklimited/fleet-street.git",
+    "service-locator": "*",
+    "doorman": "0.0.2",
+    "moment": "~2.2.1",
+    "save": "0.0.19",
+    "save-memgo": "0.0.1",
+    "schemata": "0.0.7",
+    "crud-service": "0.0.5"
   }
 }

@@ -1,9 +1,9 @@
 module.exports = createAggregator
 
-var createRecursiveSectionizer = require('recursive-sectionizer')
+var createRecursiveSectionizer = require('cf-sectionizer/recursive-sectionizer')
   , _ = require('lodash')
   , async = require('async')
-  , sectionizer = require('./lib/sectionizer')
+  , sectionizer = require('cf-sectionizer/sectionizer')
   , createListAggregator = require('./lib/aggregator')
 
 function createAggregator(listService, sectionService, crudService, options) {
@@ -18,14 +18,6 @@ function createAggregator(listService, sectionService, crudService, options) {
 
     // Make sure 'no limit' will work with comparison operators
     if (typeof limit !== 'number') limit = Infinity
-
-    // If section isn't defined, use the old API
-    if (typeof section === 'function') {
-      options.logger.warn('Section has not be passed as an argument, ' +
-        '{CURRENT} and {CURRENTANDCHILD} in lists will NOT work')
-      cb = section
-      section = undefined
-    }
 
     // Normalise the list input, so it's always an array
     if (!Array.isArray(lists)) lists = [ lists ]
@@ -95,7 +87,7 @@ function createAggregator(listService, sectionService, crudService, options) {
         deduped = articles.slice(0, isFinite(limit) ? limit : undefined)
       }
 
-      cb(null, deduped)
+      return cb(null, deduped)
 
     }
 

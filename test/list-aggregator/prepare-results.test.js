@@ -1,4 +1,4 @@
-var prepareResults = require('../../../lib/list-aggregator/prepare-results')
+var prepareResults = require('../../lib/prepare-results')
 
 describe('prepare()', function () {
 

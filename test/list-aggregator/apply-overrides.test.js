@@ -1,4 +1,4 @@
-var override = require('../../../lib/list-aggregator/apply-overrides')
+var override = require('../../lib/apply-overrides')
 
 describe('override()', function () {
 
