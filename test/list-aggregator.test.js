@@ -79,7 +79,9 @@ describe('List Aggregator', function () {
 
   // Clean up after tests
   after(function () {
-    dbConnection.dropDatabase(dbConnection.close)
+
+    dbConnection.dropDatabase()
+    dbConnection.close()
   })
 
   // Each test gets a new article service
