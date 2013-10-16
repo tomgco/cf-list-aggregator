@@ -1,6 +1,7 @@
 var _ = require('lodash')
   , save = require('save')
   , crudService = require('crud-service')
+  , logger = require('./null-logger')
 
 function createPublicQuery(query) {
   var now = new Date()
@@ -19,19 +20,19 @@ function createPublicQuery(query) {
   return publicQuery
 }
 
-module.exports = function() {
+module.exports = function(saveEngine) {
+  return function () {
+    var articleSave = save('article',
+        // Create a unique name for the memgo engine so it always starts empty.
+        { engine: saveEngine, debug: false, logger: logger })
+      , schema = require('fleet-street/bundles/article/article-schema')([], articleSave)
+      , service = crudService('article', articleSave, schema)
 
-  var memgo = require('save-memgo')
-    , articleSave = save('article',
-      // Create a unique name for the memgo engine so it always starts empty.
-      { engine: memgo('article' + Math.floor(Math.random() * 1e6)), debug: true })
-    , schema = require('fleet-street/bundles/article/article-schema')([], articleSave)
-    , service = crudService('article', articleSave, schema)
+    // Find the articles that are available to the public
+    service.findPublic = function (query, options, callback) {
+      service.find(createPublicQuery(query), options, callback)
+    }
 
-  // Find the articles that are available to the public
-  service.findPublic = function (query, options, callback) {
-    service.find(createPublicQuery(query), options, callback)
+    return service
   }
-
-  return service
 }

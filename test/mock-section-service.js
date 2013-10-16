@@ -1,8 +1,7 @@
 var save = require('save')
-  , memgo = require('save-memgo')
-  , sectionSave = save('section', { engine: memgo(), debug: true })
   , schemata = require('schemata')
   , crudService = require('crud-service')
+  , logger = require('./null-logger')
   , schema = schemata(
     { _id:
       { type: String
@@ -13,7 +12,11 @@ var save = require('save')
       }
     })
 
-module.exports = function() {
-  var service = crudService('section', sectionSave, schema)
-  return service
+module.exports = function(saveEngine) {
+  return function () {
+    var sectionSave = save('section', { engine: saveEngine, debug: false, logger: logger })
+    , service = crudService('section', sectionSave, schema)
+
+    return service
+  }
 }

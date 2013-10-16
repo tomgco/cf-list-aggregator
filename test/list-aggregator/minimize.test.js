@@ -1,7 +1,7 @@
 var minimize = require('../../lib/minimize')
   , _ = require('lodash')
-  , eql = require('../../../lib/sequential-object-eql')
-  , articleFixtures = require('../../article/fixtures')
+  , eql = require('fleet-street/lib/sequential-object-eql')
+  , articleFixtures = require('fleet-street/test/article/fixtures')
   , should = require('should')
 
 describe('minimize()', function () {

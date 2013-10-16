@@ -8,26 +8,13 @@ var createAggregator = require('..')
   , slugUniquer = 1
   , moment = require('moment')
   , logger = require('./null-logger')
-  , createArticleService = require('./mock-article-service')
-  , createSectionService = require('./mock-section-service')
+  , MongoClient = require('mongodb').MongoClient
+  , saveMongodb = require('save-mongodb')
+  , createArticleService
+  , createSectionService
+  , createListService = require('./mock-list-service')
   , eql = require('fleet-street/lib/sequential-object-eql')
 
-function createListService() {
-  var lists = {}
-    ,  id = 0
-
-  return (
-    { read: function (id, cb) {
-        cb(null, lists[id])
-      }
-    , create: function (list, cb) {
-        var _id = '_' + id++
-        lists[_id] = list
-        cb(null, _.extend({ _id: _id }, list))
-      }
-    }
-  )
-}
 
 function publishedArticleMaker(articleService, articles, custom) {
   return function (cb) {
@@ -68,13 +55,37 @@ describe('List Aggregator', function () {
   // Create a service and section fixture for all tests to use
   var sectionService
     , section
+    , dbConnection
 
+  // Create a database and service fixtures
   before(function(done) {
-    sectionService = createSectionService()
-    sectionService.create(sectionFixtures.newVaildModel, function (err, newSection) {
-      section = newSection
-      done()
+    MongoClient.connect('mongodb://127.0.0.1/cf-list-aggregator-tests', function (error, db) {
+
+      dbConnection = db
+
+      // Start with an empty database
+      db.dropDatabase(function() {
+
+        createSectionService = require('./mock-section-service')(saveMongodb(dbConnection.collection('section')))
+
+        sectionService = createSectionService()
+        sectionService.create(sectionFixtures.newVaildModel, function (err, newSection) {
+          section = newSection
+          done()
+        })
+      })
     })
+  })
+
+  // Clean up after tests
+  after(function () {
+    dbConnection.dropDatabase(dbConnection.close)
+  })
+
+  // Each test gets a new article service
+  beforeEach(function() {
+    createArticleService = require('./mock-article-service')
+    (saveMongodb(dbConnection.collection('article' + Date.now())))
   })
 
   describe('createAggregator()', function () {
@@ -235,8 +246,8 @@ describe('List Aggregator', function () {
               should.not.exist(err)
               results.should.have.length(5)
               results.forEach(function (result, i) {
-                //eql(_.extend({}, articleFixtures.minimalNewPublishedModel, { _id: articles[i].articleId }), result,
-                 // false, true)
+                eql(_.extend({}, articleFixtures.minimalNewPublishedModel, { _id: articles[i].articleId }), result,
+                  false, true)
               })
               done()
             })
@@ -281,8 +292,8 @@ describe('List Aggregator', function () {
               should.not.exist(err)
               results.should.have.length(3)
               results.forEach(function (result, i) {
-               // eql(_.extend({}, articleFixtures.minimalNewPublishedModel, { _id: articles[i].articleId }), result,
-               //   false, true)
+                eql(_.extend({}, articleFixtures.minimalNewPublishedModel, { _id: articles[i].articleId }), result,
+                  false, true)
               })
               done()
             })
@@ -327,8 +338,8 @@ describe('List Aggregator', function () {
               should.not.exist(err)
               results.should.have.length(2)
               results.forEach(function (result, i) {
-                //eql(_.extend({}, articleFixtures.minimalNewPublishedModel, { _id: articles[i].articleId }),
-                //  result, false, true)
+                eql(_.extend({}, articleFixtures.minimalNewPublishedModel, { _id: articles[i].articleId }),
+                  result, false, true)
               })
               done()
             })
@@ -1022,10 +1033,6 @@ describe('List Aggregator', function () {
         , listService = createListService()
         , sectionService = createSectionService()
         , articleService = createArticleService()
-
-      articleService.find({}, function (error, results) {
-        console.log(results)
-      })
 
       async.series(
         [ publishedArticleMaker(articleService, articles)
