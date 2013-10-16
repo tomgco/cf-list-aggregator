@@ -5,15 +5,9 @@ function tasks(pliers) {
 
   pliers('test', function (done) {
     var Mocha = require('mocha')
-
     require('should')
 
     var mocha = new Mocha()
-      , counts =
-        { total: 0
-        , pass: 0
-        , fail: 0
-        }
 
     // set a timeout
     mocha.timeout(5000)
@@ -24,21 +18,7 @@ function tasks(pliers) {
 
     mocha.reporter('spec').ui('bdd');
 
-    var runner = mocha.run(function () {
-      console.log('Finished', counts)
-      done()
-    })
-
-    runner.on('pass', function () {
-      counts.total += 1
-      counts.pass += 1
-    })
-
-    runner.on('fail', function () {
-      counts.total += 1
-      counts.fail += 1
-    })
-
+    mocha.run(done)
   })
 
   pliers('lint', function (done) {

@@ -13,7 +13,7 @@
   },
   "main": "./list-aggregator.js",
   "scripts": {
-    "test": "make test"
+    "test": "./node_modules/.bin/pliers test"
   },
   "engines": {
     "node": ">=0.10"
@@ -27,6 +27,7 @@
   "devDependencies": {
     "mocha": "~1",
     "should": "~2",
+    "pliers": "~0",
     "fleet-street": "git+ssh://git@github.com:clocklimited/fleet-street.git",
     "service-locator": "*",
     "doorman": "0.0.2",
