@@ -21,8 +21,8 @@
   "dependencies": {
     "lodash": "~2.2.1",
     "async": "~0.2.9",
-    "cf-visibility-check": "0.0.1",
-    "cf-sectionizer": "0.0.2"
+    "cf-visibility-check": "~0",
+    "cf-sectionizer": "~0"
   },
   "devDependencies": {
     "mocha": "~1",
