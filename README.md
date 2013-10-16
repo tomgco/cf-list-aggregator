@@ -8,6 +8,15 @@ Compiles lists of content base on defined filtering and ordering.
 
 ## Usage
 
+```js
+
+var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
+
+aggregate(listId, dedupe, limit, section, function (err, results) {
+...
+
+```
+
 ## Credits
 [Paul Serby](https://github.com/serby/) follow me on twitter [@serby](http://twitter.com/serby)
 
