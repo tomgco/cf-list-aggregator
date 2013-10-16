@@ -9,7 +9,6 @@ function tasks(pliers) {
 
     var mocha = new Mocha()
 
-    // set a timeout
     mocha.timeout(5000)
 
     pliers.filesets.tests.forEach(function (test) {
