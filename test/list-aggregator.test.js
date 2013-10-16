@@ -91,8 +91,8 @@ describe('List Aggregator', function () {
   describe('createAggregator()', function () {
 
     it('should be a function and return a function', function () {
-      createAggregator.should.be.a('function')
-      createAggregator().should.be.a('function')
+      createAggregator.should.be.type('function')
+      createAggregator().should.be.type('function')
     })
 
   })

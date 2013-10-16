@@ -26,8 +26,8 @@
     "mongodb": "~1.3.19"
   },
   "devDependencies": {
-    "mocha": "*",
-    "should": "*",
+    "mocha": "~1",
+    "should": "~2",
     "fleet-street": "git+ssh://git@github.com:clocklimited/fleet-street.git",
     "service-locator": "*",
     "doorman": "0.0.2",
