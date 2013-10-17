@@ -50,6 +50,10 @@ function draftArticleMaker(articleService) {
   }
 }
 
+function momentToDate(date) {
+  return date.startOf('day').toDate()
+}
+
 describe('List Aggregator', function () {
 
   // Create a service and section fixture for all tests to use
@@ -669,10 +673,6 @@ describe('List Aggregator', function () {
         )
       })
 
-      function momentToDate(date) {
-        return date.startOf('day').toDate()
-      }
-
       it('should return a list of custom expired items in relation to date parameter', function (done) {
         var articles = []
           , oneWeekAgo = momentToDate(moment().subtract('week', 1))
@@ -1215,6 +1215,48 @@ describe('List Aggregator', function () {
           })
       })
 
+      it('should return a list of articles in relation to date parameter', function (done) {
+        var articles = []
+          , oneWeekAgo = momentToDate(moment().subtract('week', 1))
+          , twoWeeksAgo = momentToDate(moment().subtract('week', 2))
+          , oneAndAHalfWeeksAgo = momentToDate(moment().subtract('week', 1).subtract('days', 3))
+          , listId
+          , listService = createListService()
+          , sectionService = createSectionService()
+          , articleService = createArticleService()
+
+        async.series(
+          [ publishedArticleMaker(articleService, articles,
+              { liveDate: twoWeeksAgo, expiryDate: oneWeekAgo, section: 'preview-section' })
+          , publishedArticleMaker(articleService, articles,
+              { liveDate: twoWeeksAgo, expiryDate: oneWeekAgo, section: 'preview-section' })
+          , function (cb) {
+              listService.create(
+                { type: 'auto'
+                , name: 'test list'
+                , sections: ['preview-section']
+                , limit: 100
+                }
+              , function (err, res) {
+                  listId = res._id
+                  cb()
+                }
+              )
+            }
+          ]
+        , function (err) {
+            if (err) throw err
+
+            var aggregate = createAggregator(listService, sectionService, articleService,
+              { logger: logger, date: oneAndAHalfWeeksAgo })
+
+            aggregate(listId, null, null, section, function (err, results) {
+              results.length.should.equal(2)
+              done()
+            })
+          }
+        )
+      })
     })
 
     it('should not have duplicates if a deduper is not injected', function (done) {
