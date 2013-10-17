@@ -760,7 +760,7 @@ describe('List Aggregator', function () {
         )
       })
 
-      it.only('should return combination list and article items in relation to date parameter', function (done) {
+      it('should return combination list and article items in relation to date parameter', function (done) {
         var articles = []
           , oneWeekAgo = momentToDate(moment().subtract('week', 1))
           , twoWeeksAgo = momentToDate(moment().subtract('week', 2))
