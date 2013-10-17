@@ -805,6 +805,58 @@ describe('List Aggregator', function () {
           }
         )
       })
+
+      it('should override the live and expiry date of a non live article with date parameter', function (done) {
+
+        var articles = []
+          , oneWeekAhead = momentToDate(moment().add('week', 1))
+          , twoWeeksAhead = momentToDate(moment().add('week', 2))
+          , oneWeekAgo = momentToDate(moment().subtract('week', 1))
+          , twoWeeksAgo = momentToDate(moment().subtract('week', 2))
+          , oneAndAHalfWeeksAgo = momentToDate(moment().subtract('week', 1).subtract('days', 3))
+          , overrides =
+            [ { liveDate: twoWeeksAgo, expiryDate: oneWeekAgo, customId: null }
+            , {}
+            , { liveDate: twoWeeksAgo, expiryDate: oneWeekAgo, customId: null }
+            ]
+          , listId
+          , listService = createListService()
+          , sectionService = createSectionService()
+          , articleService = createArticleService()
+
+        async.series(
+          [ publishedArticleMaker(articleService, articles, { liveDate: oneWeekAhead, expiryDate: twoWeeksAhead })
+          // No override for this one so results should only be 2
+          , publishedArticleMaker(articleService, articles, { liveDate: oneWeekAhead, expiryDate: twoWeeksAhead })
+          , publishedArticleMaker(articleService, articles, { liveDate: oneWeekAhead, expiryDate: twoWeeksAhead })
+          , function (cb) {
+              listService.create(
+                { type: 'manual'
+                , name: 'test list'
+                , articles: articles.map(function (article, i) {
+                    return _.extend({}, article, overrides[i])
+                  })
+                , limit: 100
+                }
+              , function (err, res) {
+                  listId = res._id
+                  cb(null)
+                }
+              )
+            }
+          ]
+        , function (err) {
+            if (err) throw err
+            var aggregate = createAggregator(listService, sectionService, articleService,
+              { logger: logger, date: oneAndAHalfWeeksAgo })
+
+            aggregate(listId, null, null, section, function (err, results) {
+              results.length.should.equal(2)
+              done()
+            })
+          }
+        )
+      })
     })
 
     describe('(for an auto list)', function () {
