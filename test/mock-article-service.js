@@ -3,8 +3,8 @@ var _ = require('lodash')
   , crudService = require('crud-service')
   , logger = require('./null-logger')
 
-function createPublicQuery(query) {
-  var now = new Date()
+function createPublicQuery(query, options) {
+  var now = options && options.date ? options.date : new Date()
     , publicQuery = _.extend({}, query,
     { state: 'Published'
     , $and:
@@ -30,7 +30,7 @@ module.exports = function(saveEngine) {
 
     // Find the articles that are available to the public
     service.findPublic = function (query, options, callback) {
-      service.find(createPublicQuery(query), options, callback)
+      service.find(createPublicQuery(query, options), options, callback)
     }
 
     return service

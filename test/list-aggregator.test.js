@@ -715,6 +715,50 @@ describe('List Aggregator', function () {
           }
         )
       })
+
+      it('should return a list of articles in relation to date parameter', function (done) {
+        var articles = []
+          , oneWeekAgo = momentToDate(moment().subtract('week', 1))
+          , twoWeeksAgo = momentToDate(moment().subtract('week', 2))
+          , oneAndAHalfWeeksAgo = momentToDate(moment().subtract('week', 1).subtract('days', 3))
+          , listId
+          , listService = createListService()
+          , sectionService = createSectionService()
+          , articleService = createArticleService()
+
+        async.series(
+          [ publishedArticleMaker(articleService, articles,
+              { liveDate: twoWeeksAgo, expiryDate: oneWeekAgo })
+          , publishedArticleMaker(articleService, articles,
+              { liveDate: twoWeeksAgo, expiryDate: oneWeekAgo })
+          , function (cb) {
+              listService.create
+              (
+                { type: 'manual'
+                , name: 'test list'
+                , articles: articles
+                , limit: 100
+                }
+              , function (err, res) {
+                  listId = res._id
+                  cb()
+                }
+              )
+            }
+          ]
+        , function (err) {
+            if (err) throw err
+
+            var aggregate = createAggregator(listService, sectionService, articleService,
+              { logger: logger, date: oneAndAHalfWeeksAgo })
+
+            aggregate(listId, null, null, section, function (err, results) {
+              results.length.should.equal(2)
+              done()
+            })
+          }
+        )
+      })
     })
 
     describe('(for an auto list)', function () {
