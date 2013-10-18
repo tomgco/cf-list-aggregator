@@ -1,10 +1,21 @@
+module.exports = publishedArticleMaker
+
 var _ = require('lodash')
   , articleFixtures = require('fleet-street/test/article/fixtures')
+  , async = require('async')
 
-module.exports = function publishedArticleMaker(articleService, articles, custom) {
+module.exports.createArticles = function (i, articleService, articles) {
+  return function (cb) {
+    return async.times(i, publishedArticleMaker(articleService, articles, {}), cb)
+  }
+}
+
+function publishedArticleMaker(articleService, articles, custom) {
   var slugUniquer = 1
 
-  return function (cb) {
+  return function (n, cb) {
+    if (!cb) cb = n
+
     var model = _.extend({}, articleFixtures.validNewPublishedModel, custom)
 
     // Make slug unique to stop validation errors (slug and section unique)

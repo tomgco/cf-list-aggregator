@@ -110,9 +110,8 @@ describe('List aggregator (for a manual list)', function () {
       [ customListItemMaker(articles, { 'longTitle': 'Bob', 'type': 'custom' })
       , customListItemMaker(articles, { 'shortTitle': 'Alice', 'type': 'custom' })
       , customListItemMaker(articles, { 'type': 'custom' })
-      , publishedArticleMaker(articleService, articles)
+      , publishedArticleMaker.createArticles(2, articleService, articles)
       , customListItemMaker(articles, { 'type': 'custom' })
-      , publishedArticleMaker(articleService, articles)
       , customListItemMaker(articles, { 'type': 'custom' })
       , function (cb) {
           listService.create(
@@ -156,13 +155,8 @@ describe('List aggregator (for a manual list)', function () {
       , articleService = createArticleService()
 
     async.series(
-      [ publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, [])
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, [])
-      , publishedArticleMaker(articleService, articles)
+      [ publishedArticleMaker.createArticles(5, articleService, articles)
+      , publishedArticleMaker.createArticles(2, articleService, [])
       , function (cb) {
           listService.create(
               { type: 'manual'
@@ -203,11 +197,9 @@ describe('List aggregator (for a manual list)', function () {
       , articleService = createArticleService()
 
     async.series(
-      [ publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
+      [ publishedArticleMaker.createArticles(3, articleService, articles)
       , draftArticleMaker(articleService)
       , draftArticleMaker(articleService)
-      , publishedArticleMaker(articleService, articles)
       , draftArticleMaker(articleService)
       , function (cb) {
           listService.create(
@@ -250,11 +242,9 @@ describe('List aggregator (for a manual list)', function () {
       , articleService = createArticleService()
 
     async.series(
-      [ publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
+      [ publishedArticleMaker.createArticles(3, articleService, articles)
       , draftArticleMaker(articleService)
       , draftArticleMaker(articleService)
-      , publishedArticleMaker(articleService, articles)
       , draftArticleMaker(articleService)
       , function (cb) {
           listService.create(
@@ -301,11 +291,9 @@ describe('List aggregator (for a manual list)', function () {
       , articleService = createArticleService()
 
     async.series(
-      [ publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
+      [ publishedArticleMaker.createArticles(3, articleService, articles)
       , draftArticleMaker(articleService)
       , draftArticleMaker(articleService)
-      , publishedArticleMaker(articleService, articles)
       , draftArticleMaker(articleService)
       , function (cb) {
         listService.create(
@@ -362,8 +350,7 @@ describe('List aggregator (for a manual list)', function () {
     async.series
     (
       [ publishedArticleMaker(articleService, articles, {liveDate: oneWeekAhead, expiryDate: twoWeeksAhead })
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
+      , publishedArticleMaker.createArticles(2, articleService, articles)
       , function (cb) {
           listService.create
           (
@@ -406,11 +393,8 @@ describe('List aggregator (for a manual list)', function () {
       , sectionService = createSectionService()
       , articleService = createArticleService()
 
-    async.series
-    (
-      [ publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
+    async.series(
+      [ publishedArticleMaker.createArticles(3, articleService, articles)
       , function (cb) {
           listService.create
           (
@@ -533,11 +517,9 @@ describe('List aggregator (for a manual list)', function () {
       , sectionService = createSectionService()
       , articleService = createArticleService()
 
-    async.series
-    (
+    async.series(
       [ customListItemMaker(articles, { 'type': 'custom', liveDate: twoWeeksAgo, expiryDate: oneWeekAgo })
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
+      , publishedArticleMaker.createArticles(2, articleService, articles)
       , customListItemMaker(articles, { 'type': 'custom' })
       , customListItemMaker(articles, { 'type': 'custom' })
       , function (cb) {

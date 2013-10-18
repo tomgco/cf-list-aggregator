@@ -84,12 +84,8 @@ describe('List Aggregator', function () {
         , articleService = createArticleService()
 
       async.series(
-        [ publishedArticleMaker(articleService, articles)
-        , publishedArticleMaker(articleService, articles)
-        , publishedArticleMaker(articleService, articles)
+        [ publishedArticleMaker.createArticles(5, articleService, articles)
         , draftArticleMaker(articleService)
-        , publishedArticleMaker(articleService, articles)
-        , publishedArticleMaker(articleService, articles)
         , function (cb) {
             listService.create(
               { type: 'auto'
@@ -139,12 +135,8 @@ describe('List Aggregator', function () {
       , articleService = createArticleService()
 
     async.series(
-      [ publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
+      [ publishedArticleMaker.createArticles(5, articleService, articles)
       , draftArticleMaker(articleService)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
       , function (cb) {
           listService.create(
             { type: 'auto'
@@ -190,18 +182,8 @@ describe('List Aggregator', function () {
       , articleService = createArticleService()
 
     async.series(
-      [ publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
+      [ publishedArticleMaker.createArticles(11, articleService, articles)
       , draftArticleMaker(articleService)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
-      , publishedArticleMaker(articleService, articles)
       , function (cb) {
           listService.create(
             { type: 'auto'
