@@ -4,13 +4,13 @@ var createAggregator = require('..')
   , should = require('should')
   , createDedupe = require('doorman')
   , logger = require('./null-logger')
-  , MongoClient = require('mongodb').MongoClient
   , saveMongodb = require('save-mongodb')
   , createArticleService
   , createSectionService
   , createListService = require('./mock-list-service')
   , publishedArticleMaker = require('./lib/published-article-maker')
   , draftArticleMaker = require('./lib/draft-article-maker')
+  , dbConnect = require('./lib/db-connection')
 
 describe('List Aggregator', function () {
 
@@ -21,8 +21,7 @@ describe('List Aggregator', function () {
 
   // Create a database and service fixtures
   before(function(done) {
-    MongoClient.connect('mongodb://127.0.0.1/cf-list-aggregator-tests', function (error, db) {
-
+    dbConnect.connect(function (err, db) {
       dbConnection = db
 
       // Start with an empty database
@@ -40,11 +39,7 @@ describe('List Aggregator', function () {
   })
 
   // Clean up after tests
-  after(function () {
-
-    dbConnection.dropDatabase()
-    dbConnection.close()
-  })
+  after(dbConnect.disconnect)
 
   // Each test gets a new article service
   beforeEach(function() {

@@ -1,5 +1,4 @@
 var createAggregator = require('..')
-  , MongoClient = require('mongodb').MongoClient
   , saveMongodb = require('save-mongodb')
   , async = require('async')
   , should = require('should')
@@ -13,6 +12,7 @@ var createAggregator = require('..')
   , momentToDate = require('./lib/moment-to-date')
   , logger = require('./null-logger')
   , createListService = require('./mock-list-service')
+  , dbConnect = require('./lib/db-connection')
   , createArticleService
   , createSectionService
   , section
@@ -20,29 +20,21 @@ var createAggregator = require('..')
   , dbConnection
 
 before(function(done) {
-  MongoClient.connect('mongodb://127.0.0.1/cf-list-aggregator-tests', function (error, db) {
-
+  dbConnect.connect(function (err, db) {
     dbConnection = db
 
-    // Start with an empty database
-    db.dropDatabase(function() {
+    createSectionService = require('./mock-section-service')(saveMongodb(dbConnection.collection('section')))
 
-      createSectionService = require('./mock-section-service')(saveMongodb(dbConnection.collection('section')))
-
-      sectionService = createSectionService()
-      sectionService.create(sectionFixtures.newVaildModel, function (err, newSection) {
-        section = newSection
-        done()
-      })
+    sectionService = createSectionService()
+    sectionService.create(sectionFixtures.newVaildModel, function (err, newSection) {
+      section = newSection
+      done()
     })
   })
 })
 
 // Clean up after tests
-after(function () {
-  dbConnection.dropDatabase()
-  dbConnection.close()
-})
+after(dbConnect.disconnect)
 
 // Each test gets a new article service
 beforeEach(function() {
