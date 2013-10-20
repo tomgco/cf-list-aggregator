@@ -108,8 +108,7 @@ describe('List Aggregator', function () {
         ], function (err) {
           if (err) throw err
 
-          var aggregate = createAggregator(listService, sectionService, articleService,
-        { logger: logger })
+          var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
 
           aggregate(listIds, null, null, section, function (err, results) {
             should.not.exist(err)
@@ -206,8 +205,7 @@ describe('List Aggregator', function () {
       ], function (err) {
         if (err) throw err
 
-        var aggregate = createAggregator(
-              listService, sectionService, articleService, { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
           , dedupe = createDedupe()
 
         dedupe(articles[1].articleId)

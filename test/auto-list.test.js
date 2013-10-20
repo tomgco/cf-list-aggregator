@@ -53,12 +53,10 @@ describe('List aggregator (for an auto list)', function () {
       , articleService = createArticleService()
 
     async.series(
-      [ publishedArticleMaker(articleService, articles, { tags: [ { tag: 'test-tag', type: 'test-type' } ] })
-      , publishedArticleMaker(articleService, [])
-      , publishedArticleMaker(articleService, articles, { tags: [ { tag: 'test-tag', type: 'test-type' } ] })
-      , publishedArticleMaker(articleService, [])
+      [ publishedArticleMaker.createArticles(2, articleService,
+        articles, { tags: [ { tag: 'test-tag', type: 'test-type' } ] })
+      , publishedArticleMaker.createArticles(3, articleService, [])
       , publishedArticleMaker(articleService, [], { tags: [ { tag: 'test-tag2', type: 'test-type' } ] })
-      , publishedArticleMaker(articleService, [])
       , publishedArticleMaker(articleService, articles, { tags:
           [ { tag: 'test-tag', type: 'test-type' }
           , { tag: 'test-tag2', type: 'test-type' }
@@ -79,8 +77,7 @@ describe('List aggregator (for an auto list)', function () {
       ], function (err) {
         if (err) throw err
 
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
 
         aggregate(listId, null, null, section, function (err, results) {
           should.not.exist(err)
@@ -108,13 +105,10 @@ describe('List aggregator (for an auto list)', function () {
 
     async.series(
       [ publishedArticleMaker(articleService, articles, { section: '3' })
-      , publishedArticleMaker(articleService, articles, { section: '4' })
-      , publishedArticleMaker(articleService, articles, { section: '4' })
-      , publishedArticleMaker(articleService, [])
+      , publishedArticleMaker.createArticles(3, articleService, articles, { section: '4' })
+      , publishedArticleMaker.createArticles(2, articleService, [])
       , draftArticleMaker(articleService)
       , publishedArticleMaker(articleService, [], { section: '5' })
-      , publishedArticleMaker(articleService, [])
-      , publishedArticleMaker(articleService, articles, { section: '4' })
       , function (cb) {
           listService.create(
             { type: 'auto'
@@ -157,14 +151,11 @@ describe('List aggregator (for an auto list)', function () {
       , articleService = createArticleService()
 
     async.series(
-      [ publishedArticleMaker(articleService, articles, { type: 'article' })
-      , publishedArticleMaker(articleService, articles, { type: 'gallery' })
-      , publishedArticleMaker(articleService, articles, { type: 'article' })
-      , publishedArticleMaker(articleService, [], { type: 'styleselector' })
+      [ publishedArticleMaker.createArticles(2, articleService, articles, { type: 'article' })
+      , publishedArticleMaker.createArticles(2, articleService, articles, { type: 'gallery' })
+      , publishedArticleMaker.createArticles(2, articleService, [], { type: 'styleselector' })
       , draftArticleMaker(articleService, [], { type: 'article' })
-      , publishedArticleMaker(articleService, [], { type: 'styleselector' })
       , publishedArticleMaker(articleService, [], { type: 'article' })
-      , publishedArticleMaker(articleService, articles, { type: 'gallery' })
       , function (cb) {
           listService.create(
             { type: 'auto'
@@ -181,8 +172,7 @@ describe('List aggregator (for an auto list)', function () {
       ], function (err) {
         if (err) throw err
 
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
 
         aggregate(listId, null, null, section, function (err, results) {
           should.not.exist(err)
@@ -207,16 +197,13 @@ describe('List aggregator (for an auto list)', function () {
       , sectionService = createSectionService()
       , articleService = createArticleService()
 
-
     async.series(
       [ publishedArticleMaker(articleService, articles, { subType: 'Portrait' })
       , publishedArticleMaker(articleService, articles, { subType: 'Landscape' })
-      , publishedArticleMaker(articleService, articles, { subType: 'Video' })
-      , publishedArticleMaker(articleService, [], { subType: 'Portrait' })
+      , publishedArticleMaker.createArticles(2, articleService, articles, { subType: 'Video' })
+      , publishedArticleMaker.createArticles(2, articleService, [], { subType: 'Portrait' })
       , draftArticleMaker(articleService, [], { subType: 'Portrait' })
-      , publishedArticleMaker(articleService, [], { subType: 'Portrait' })
       , publishedArticleMaker(articleService, [], { subType: 'Landscape' })
-      , publishedArticleMaker(articleService, articles, { subType: 'Video' })
       , function (cb) {
           listService.create(
             { type: 'auto'
@@ -233,8 +220,7 @@ describe('List aggregator (for an auto list)', function () {
       ], function (err) {
         if (err) throw err
 
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
 
         aggregate(listId, null, null, section, function (err, results) {
           should.not.exist(err)
@@ -282,8 +268,7 @@ describe('List aggregator (for an auto list)', function () {
       ], function (err) {
         if (err) throw err
 
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
 
         aggregate(listId, null, null, section, function (err, results) {
           should.not.exist(err)
@@ -333,8 +318,7 @@ describe('List aggregator (for an auto list)', function () {
       ], function (err) {
         if (err) throw err
 
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
 
         aggregate(listId, null, null, section, function (err, results) {
           should.not.exist(err)
@@ -360,17 +344,13 @@ describe('List aggregator (for an auto list)', function () {
   it('should limit the number of articles', function (done) {
 
     var listId
-    , listService = createListService()
-    , sectionService = createSectionService()
-    , articleService = createArticleService()
+      , listService = createListService()
+      , sectionService = createSectionService()
+      , articleService = createArticleService()
 
     async.series(
-      [ publishedArticleMaker(articleService, [])
-      , publishedArticleMaker(articleService, [])
-      , publishedArticleMaker(articleService, [])
+      [ publishedArticleMaker.createArticles(5, articleService, [])
       , draftArticleMaker(articleService)
-      , publishedArticleMaker(articleService, [])
-      , publishedArticleMaker(articleService, [])
       , function (cb) {
           listService.create(
             { type: 'auto'
@@ -386,8 +366,7 @@ describe('List aggregator (for an auto list)', function () {
       ], function (err) {
         if (err) throw err
 
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
 
         aggregate(listId, null, null, section, function (err, results) {
           should.not.exist(err)
@@ -409,9 +388,7 @@ describe('List aggregator (for an auto list)', function () {
       , articleService = createArticleService()
 
     async.series(
-      [ publishedArticleMaker(articleService, articles,
-          { liveDate: twoWeeksAgo, expiryDate: oneWeekAgo, section: 'preview-section' })
-      , publishedArticleMaker(articleService, articles,
+      [ publishedArticleMaker.createArticles(2, articleService, articles,
           { liveDate: twoWeeksAgo, expiryDate: oneWeekAgo, section: 'preview-section' })
       , function (cb) {
           listService.create(

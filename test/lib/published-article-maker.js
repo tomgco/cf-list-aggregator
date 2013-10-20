@@ -4,9 +4,9 @@ var _ = require('lodash')
   , articleFixtures = require('fleet-street/test/article/fixtures')
   , async = require('async')
 
-module.exports.createArticles = function (i, articleService, articles) {
+module.exports.createArticles = function (i, articleService, articles, custom) {
   return function (cb) {
-    return async.times(i, publishedArticleMaker(articleService, articles, {}), cb)
+    return async.times(i, publishedArticleMaker(articleService, articles, custom), cb)
   }
 }
 

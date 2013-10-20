@@ -164,8 +164,7 @@ describe('List aggregator (for a manual list)', function () {
       ], function (err) {
         if (err) throw err
 
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
 
         aggregate(listId, null, null, section, function (err, results) {
           should.not.exist(err)
@@ -208,8 +207,7 @@ describe('List aggregator (for a manual list)', function () {
       ], function (err) {
         if (err) throw err
 
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
 
         aggregate(listId, null, null, section, function (err, results) {
           should.not.exist(err)
@@ -362,8 +360,8 @@ describe('List aggregator (for a manual list)', function () {
       ]
     , function (err) {
         if (err) throw err
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
+
         aggregate(listId, null, null, section, function (err, results) {
           results.length.should.equal(3)
           done()
@@ -406,8 +404,8 @@ describe('List aggregator (for a manual list)', function () {
       ]
     , function (err) {
         if (err) throw err
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
+
         aggregate(listId, null, null, section, function (err, results) {
           results.length.should.equal(2)
           done()
@@ -448,8 +446,8 @@ describe('List aggregator (for a manual list)', function () {
       ]
     , function (err) {
         if (err) throw err
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
+
         aggregate(listId, null, null, section, function (err, results) {
           results.length.should.equal(2)
           done()
@@ -531,8 +529,8 @@ describe('List aggregator (for a manual list)', function () {
       ]
     , function (err) {
         if (err) throw err
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
+
         aggregate(listId, null, null, section, function (err, results) {
           results.length.should.equal(4)
           done()
@@ -570,8 +568,7 @@ describe('List aggregator (for a manual list)', function () {
       ]
     , function (err) {
         if (err) throw err
-        var aggregate = createAggregator(listService, sectionService, articleService,
-    { logger: logger })
+        var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger })
         aggregate(listId, null, null, section, function (err, results) {
           results.length.should.equal(1)
           done()
