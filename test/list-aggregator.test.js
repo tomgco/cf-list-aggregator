@@ -24,16 +24,12 @@ describe('List Aggregator', function () {
     dbConnect.connect(function (err, db) {
       dbConnection = db
 
-      // Start with an empty database
-      db.dropDatabase(function() {
+      createSectionService = require('./mock-section-service')(saveMongodb(dbConnection.collection('section')))
 
-        createSectionService = require('./mock-section-service')(saveMongodb(dbConnection.collection('section')))
-
-        sectionService = createSectionService()
-        sectionService.create(sectionFixtures.newVaildModel, function (err, newSection) {
-          section = newSection
-          done()
-        })
+      sectionService = createSectionService()
+      sectionService.create(sectionFixtures.newVaildModel, function (err, newSection) {
+        section = newSection
+        done()
       })
     })
   })
