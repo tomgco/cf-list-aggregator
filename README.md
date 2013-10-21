@@ -23,6 +23,25 @@ var aggregate = createAggregator(listService, sectionService, articleService, { 
 
 This aggregator instance now performs all operations based on this date.
 
+### Specifying fields to return
+To specify fields to return from the query, use the `fields` option. This field can either be an object or an array - mongo is tolerant of either.
+
+An object can be like so:
+
+```js
+  fields: { longTitle: 1, tags: 1 }
+```
+
+Or an array:
+```js
+  fields: ['longTitle', 'tags']
+```
+
+Example:
+```js
+var aggregate = createAggregator(listService, sectionService, articleService, { logger: logger, fields: { longTitle: 1 } })
+```
+
 ## Types of list
 There are two types of list:
 
