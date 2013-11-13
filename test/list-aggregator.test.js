@@ -46,8 +46,12 @@ describe('List Aggregator', function () {
   describe('createAggregator()', function () {
 
     it('should be a function and return a function', function () {
+
+      var listService = createListService()
+        , articleService = createArticleService()
+
       createAggregator.should.be.type('function')
-      createAggregator().should.be.type('function')
+      createAggregator(listService, sectionService, articleService,{ logger: logger }).should.be.type('function')
     })
 
   })
